@@ -19,7 +19,9 @@ Claude Skills are structured markdown documents that guide Claude through comple
 claude-skills-library/
 ├── generic/          # Works with any programming language/framework
 ├── flutter/          # Flutter/Dart-specific workflows
+├── commands/         # Reusable documentation workflow commands
 ├── templates/        # Adaptable templates for common patterns
+├── speckit/          # GitHub Spec-Kit commands (feature development)
 └── README.md         # This file
 ```
 
@@ -35,6 +37,7 @@ These skills work across any programming language, framework, or project type.
 | **[using-git-worktrees](generic/using-git-worktrees.md)** | Create isolated git workspaces with smart directory selection | Starting feature work that needs isolation |
 | **[test-driven-development](generic/test-driven-development.md)** | Red-Green-Refactor TDD discipline with iron law enforcement | Implementing any feature or bugfix |
 | **[finishing-a-development-branch](generic/finishing-a-development-branch.md)** | Guide completion of work with structured options (merge/PR/keep/discard) | Implementation complete, all tests pass |
+| **[read-with-context](generic/read-with-context.md)** | Systematic workflow for understanding code by reading related files with context | Understanding features, tracing data flow, debugging |
 
 ### 📱 Flutter-Specific Skills
 
@@ -44,6 +47,27 @@ Specialized workflows for Flutter/Dart development.
 |-------|-------------|----------|
 | **[mobile-first-design](flutter/mobile-first-design.md)** | Mobile-first UI implementation with responsive patterns | Creating/refactoring Flutter UI |
 | **[cubit-testing](flutter/cubit-testing.md)** | Systematic BLoC/Cubit testing with Mockito | Testing state management |
+
+### 📝 Documentation Workflow Commands
+
+Reusable slash commands for managing project documentation. Symlink these to `.claude/commands/` in your project.
+
+| Command | Description | Use When |
+|---------|-------------|----------|
+| **[/docs.create](commands/docs.create.md)** | Initialize feature documentation (CLAUDE.md + CHANGELOG.md) | Starting new feature development |
+| **[/docs.log](commands/docs.log.md)** | Log changes to feature CHANGELOG.md | After completing significant work |
+| **[/docs.update](commands/docs.update.md)** | Update feature architecture documentation | After adding/changing components |
+| **[/docs.complete](commands/docs.complete.md)** | Finalize feature and roll up to root CHANGELOG.md | Feature implementation complete |
+| **[/docs.validate](commands/docs.validate.md)** | Check documentation quality and consistency | Before merging or periodically |
+| **[/docs.search](commands/docs.search.md)** | Search across all project documentation | Finding information in docs |
+| **[/docs.init](commands/docs.init.md)** | Initialize root documentation system for new project | Project setup |
+| **[/docs.archive](commands/docs.archive.md)** | Archive completed or deprecated features | Cleanup and maintenance |
+
+**Setup**: Symlink to your project:
+```bash
+ln -s ../claude-skills-library/commands/docs.create.md .claude/commands/docs.create.md
+# ... (repeat for other commands)
+```
 
 ### 🔧 Adaptable Templates
 
@@ -378,12 +402,13 @@ Claude: Wrapping form in SingleChildScrollView...
 Claude: Testing on 375x667px viewport...
 ```
 
-## 📊 Skill Statistics
+## 📊 Library Statistics
 
-- **Total Skills**: 9 (4 generic, 2 Flutter, 3 templates)
-- **Lines of Documentation**: ~6,500
+- **Total Skills**: 10 (5 generic, 2 Flutter, 3 templates)
+- **Total Commands**: 8 (documentation workflow)
+- **Lines of Documentation**: ~10,000+
 - **Code Examples**: 100+
-- **Workflows Covered**: Development, Testing, Design, Git, i18n, Auditing, Documentation Systems
+- **Workflows Covered**: Development, Testing, Design, Git, i18n, Auditing, Documentation Systems, Code Understanding
 
 ## 🔮 Future Skills (Roadmap)
 

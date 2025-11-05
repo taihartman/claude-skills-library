@@ -58,14 +58,26 @@ These are pattern templates that need customization for your specific project.
 
 ### For Claude Code (VSCode Extension)
 
-1. **Copy skills to your project:**
-   ```bash
-   cp -r claude-skills-library/.claude/skills/* .claude/skills/
-   ```
+**Choose your setup method:**
 
-2. **Skills are automatically available** - Claude Code detects them from `.claude/skills/`
+**Option A: Simple Copy (Quick Start)**
+```bash
+cp -r claude-skills-library/.claude/skills/* .claude/skills/
+```
 
-3. **Use a skill:**
+**Option B: Git Submodule + Symlinks (Recommended for Multi-Project Use)**
+
+For a maintainable setup that stays in sync across projects, see **[SETUP_GUIDE.md](SETUP_GUIDE.md)** for complete instructions on using Git submodules and symlinks.
+
+**Benefits:** Automatic updates, no duplication, version-tracked, single source of truth.
+
+---
+
+**After setup:**
+
+1. **Skills are automatically available** - Claude Code detects them from `.claude/skills/`
+
+2. **Use a skill:**
    - Claude will proactively use skills when appropriate
    - You can reference them: "Use the brainstorming skill to help me design this"
 

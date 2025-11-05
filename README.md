@@ -69,6 +69,28 @@ ln -s ../claude-skills-library/commands/docs.create.md .claude/commands/docs.cre
 # ... (repeat for other commands)
 ```
 
+### 📋 Spec-Kit Commands
+
+Structured feature development workflow. **Symlink these to `.claude/commands/` in your project.**
+
+| Command | Description | Use When |
+|---------|-------------|----------|
+| **[/speckit.specify](speckit/specify.md)** | Create feature specification | Starting new feature |
+| **[/speckit.clarify](speckit/clarify.md)** | ⚠️ **REQUIRED BEFORE PLANNING** - Identify underspecified areas | After specify, before plan |
+| **[/speckit.plan](speckit/plan.md)** | Generate implementation plan | After clarification |
+| **[/speckit.tasks](speckit/tasks.md)** | Generate task breakdown | After plan |
+| **[/speckit.analyze](speckit/analyze.md)** | ⚠️ **REQUIRED BEFORE IMPLEMENTING** - Cross-artifact consistency check | After tasks, before implement |
+| **[/speckit.checklist](speckit/checklist.md)** | ⚠️ **REQUIRED** - Quality validation checklist ("unit tests for English") | After tasks |
+| **[/speckit.implement](speckit/implement.md)** | Execute implementation | After analysis passes |
+| **[/speckit.constitution](speckit/constitution.md)** | Define project principles | Project setup |
+
+**⚠️ CRITICAL:** Three commands are **mandatory checkpoints** - do not skip:
+1. **/speckit.clarify** - Run BEFORE /speckit.plan (prevents incomplete specs)
+2. **/speckit.analyze** - Run AFTER /speckit.tasks, BEFORE /speckit.implement (catches inconsistencies)
+3. **/speckit.checklist** - Run to validate completeness (acceptance criteria)
+
+**Setup**: See [DOCUMENTATION_SYSTEM.md](DOCUMENTATION_SYSTEM.md) for complete workflow.
+
 ### 🔧 Adaptable Templates
 
 These are pattern templates that need customization for your specific project.

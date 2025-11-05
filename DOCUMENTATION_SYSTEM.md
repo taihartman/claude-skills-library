@@ -2,6 +2,25 @@
 
 This guide explains how to use the **commands/** and **speckit/** directories together with the project documentation template to create a comprehensive, maintainable documentation system.
 
+## ⚠️ CRITICAL: Required Spec-Kit Checkpoints
+
+**When using Spec-Kit, you MUST run these commands at specific points:**
+
+| Checkpoint | Command | When | Why Critical |
+|------------|---------|------|--------------|
+| **1** | `/speckit.clarify` | After `/speckit.specify`, BEFORE `/speckit.plan` | Identifies underspecified areas; prevents wasted planning effort on incomplete specs |
+| **2** | `/speckit.analyze` | After `/speckit.tasks`, BEFORE `/speckit.implement` | Cross-artifact consistency check; catches misalignments before building |
+| **3** | `/speckit.checklist` | After `/speckit.tasks` | Generates quality validation checklist ("unit tests for English") |
+
+**⚠️ Skipping these checkpoints leads to:**
+- Building features based on incomplete understanding (skip clarify)
+- Implementing misaligned requirements (skip analyze)
+- Missing acceptance criteria (skip checklist)
+
+**These are not optional** - they are quality gates that save time by catching issues early.
+
+---
+
 ## 🎯 What This System Provides
 
 - ✅ **Feature-driven development** - Each feature has its own spec, plan, tasks, docs, and changelog
@@ -95,17 +114,23 @@ your-project/
 
 **Output:** `specs/012-dark-mode/spec.md`
 
-#### Step 2: Clarify underspecified areas
+#### Step 2: Clarify underspecified areas ⚠️ REQUIRED BEFORE PLANNING
 ```bash
 /speckit.clarify
 
+# ⚠️ CRITICAL: Run this BEFORE /speckit.plan
 # Claude identifies gaps and asks targeted questions:
 # - "Should dark mode persist across sessions?"
 # - "Which components need dark variants?"
 # - "Should there be an auto/system mode?"
+#
+# WHY REQUIRED: Prevents wasted planning effort on incomplete specs
+# Clarifies ambiguities before design begins
 ```
 
 **Updates:** `specs/012-dark-mode/spec.md` (with clarifications added)
+
+**⚠️ DO NOT SKIP THIS STEP** - Planning with an underspecified spec leads to rework!
 
 #### Step 3: Generate implementation plan
 ```bash
@@ -134,31 +159,43 @@ your-project/
 
 **Output:** `specs/012-dark-mode/tasks.md`
 
-#### Step 5: Analyze consistency
+#### Step 5: Analyze consistency ⚠️ REQUIRED BEFORE IMPLEMENTATION
 ```bash
 /speckit.analyze
 
+# ⚠️ CRITICAL: Run this AFTER /speckit.tasks, BEFORE /speckit.implement
 # Claude checks:
 # - spec.md ↔ plan.md alignment
 # - plan.md ↔ tasks.md completeness
 # - Missing requirements
-# - Inconsistencies
+# - Inconsistencies across all artifacts
+#
+# WHY REQUIRED: Catches misalignments before implementation starts
+# Prevents building the wrong thing or missing requirements
 ```
 
 **Output:** Analysis report with any issues found
 
-#### Step 6: Generate quality checklist
+**⚠️ DO NOT PROCEED TO IMPLEMENTATION** until analysis passes!
+
+#### Step 6: Generate quality checklist ⚠️ REQUIRED FOR VALIDATION
 ```bash
 /speckit.checklist
 
+# ⚠️ CRITICAL: Creates "unit tests for English"
 # Claude creates custom validation checklist:
 # - [ ] Theme persists on refresh
 # - [ ] All components have dark variants
 # - [ ] Settings toggle works
 # - [ ] Tests cover theme switching
+#
+# WHY REQUIRED: Ensures requirements are complete, clear, and consistent
+# Acts as acceptance criteria before marking feature complete
 ```
 
 **Output:** Quality checklist for verification
+
+**⚠️ USE THIS CHECKLIST** to validate implementation completeness!
 
 #### Step 7: Initialize feature documentation
 ```bash
@@ -309,13 +346,19 @@ your-project/
 **Starting a new feature:**
 ```bash
 1. /speckit.specify       # Define what
-2. /speckit.clarify       # Clarify gaps
+2. /speckit.clarify       # ⚠️ REQUIRED - Clarify gaps BEFORE planning
 3. /speckit.plan          # Design how
 4. /speckit.tasks         # Break down steps
-5. /speckit.analyze       # Verify consistency
-6. /docs.create           # Initialize docs
-7. /speckit.implement     # Build it
+5. /speckit.analyze       # ⚠️ REQUIRED - Verify consistency BEFORE implementing
+6. /speckit.checklist     # ⚠️ REQUIRED - Generate quality validation checklist
+7. /docs.create           # Initialize docs
+8. /speckit.implement     # Build it
 ```
+
+**⚠️ CRITICAL CHECKPOINTS - DO NOT SKIP:**
+- **After /speckit.specify** → MUST run /speckit.clarify (prevents incomplete specs)
+- **After /speckit.tasks** → MUST run /speckit.analyze (catches inconsistencies)
+- **Before marking complete** → MUST use /speckit.checklist (validates completeness)
 
 **During implementation:**
 ```bash

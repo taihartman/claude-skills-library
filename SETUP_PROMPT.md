@@ -164,9 +164,39 @@ Once setup is complete:
 
 1. **Read the docs:** Start with `CLAUDE.md`
 2. **Start your first feature:** `/speckit.specify`
-3. **Follow the workflow:** specify → clarify → plan → tasks → implement
+3. **Follow the REQUIRED workflow:**
+   ```
+   /speckit.specify
+   /speckit.clarify     ⚠️ REQUIRED - Do NOT skip!
+   /speckit.plan
+   /speckit.tasks
+   /speckit.analyze     ⚠️ REQUIRED - Do NOT skip!
+   /speckit.checklist   ⚠️ REQUIRED - Do NOT skip!
+   /speckit.implement
+   ```
 4. **Log as you go:** `/docs.log "description"` frequently
 5. **Complete when done:** `/docs.complete`
+
+### ⚠️ CRITICAL: Required Spec-Kit Checkpoints
+
+**Three commands are mandatory quality gates:**
+
+1. **`/speckit.clarify`** - Run AFTER /speckit.specify, BEFORE /speckit.plan
+   - Identifies underspecified areas
+   - Prevents wasted planning effort on incomplete specs
+   - **Skipping this = building on shaky foundation**
+
+2. **`/speckit.analyze`** - Run AFTER /speckit.tasks, BEFORE /speckit.implement
+   - Cross-artifact consistency check
+   - Catches misalignments before building
+   - **Skipping this = implementing wrong requirements**
+
+3. **`/speckit.checklist`** - Run AFTER /speckit.tasks
+   - Generates quality validation checklist
+   - "Unit tests for English" - validates completeness
+   - **Skipping this = no acceptance criteria**
+
+**These are not optional** - they catch issues early and save time!
 
 ---
 

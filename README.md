@@ -51,6 +51,7 @@ These are pattern templates that need customization for your specific project.
 
 | Template | Description | Frameworks |
 |----------|-------------|------------|
+| **[project-documentation-structure-template](templates/project-documentation-structure-template.md)** | Complete documentation system (CLAUDE.md, specs/, .claude/ structure) | Any |
 | **[activity-logging-template](templates/activity-logging-template.md)** | Add audit trail/activity logging to operations | Any |
 | **[localization-workflow-template](templates/localization-workflow-template.md)** | Internationalization (i18n) best practices | React, Vue, Angular, Flutter, etc. |
 
@@ -379,10 +380,10 @@ Claude: Testing on 375x667px viewport...
 
 ## 📊 Skill Statistics
 
-- **Total Skills**: 8 (4 generic, 2 Flutter, 2 templates)
-- **Lines of Documentation**: ~4,500
+- **Total Skills**: 9 (4 generic, 2 Flutter, 3 templates)
+- **Lines of Documentation**: ~6,500
 - **Code Examples**: 100+
-- **Workflows Covered**: Development, Testing, Design, Git, i18n, Auditing
+- **Workflows Covered**: Development, Testing, Design, Git, i18n, Auditing, Documentation Systems
 
 ## 🔮 Future Skills (Roadmap)
 

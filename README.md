@@ -63,9 +63,18 @@ Reusable slash commands for managing project documentation. Symlink these to `.c
 | **[/docs.init](commands/docs.init.md)** | Initialize root documentation system for new project | Project setup |
 | **[/docs.archive](commands/docs.archive.md)** | Archive completed or deprecated features | Cleanup and maintenance |
 
+### 🎯 Productivity Commands
+
+Workflow enhancement commands to improve development efficiency.
+
+| Command | Description | Use When |
+|---------|-------------|----------|
+| **[/suggest-skills](commands/suggest-skills.md)** | Analyze current work and suggest relevant skills | Need guidance on which skills to use |
+
 **Setup**: Symlink to your project:
 ```bash
 ln -s ../claude-skills-library/commands/docs.create.md .claude/commands/docs.create.md
+ln -s ../claude-skills-library/commands/suggest-skills.md .claude/commands/suggest-skills.md
 # ... (repeat for other commands)
 ```
 

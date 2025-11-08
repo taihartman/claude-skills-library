@@ -29,30 +29,32 @@ Systematic workflow for writing clean, performant, and maintainable GDScript cod
 
 ```gdscript
 # File names: snake_case
-# rookie_character.gd
-# plinko_board.gd
-# weapon_peg.gd
+# characters/rookie/rookie.gd (co-located with scene)
+# game/plinko_board/plinko_board.gd (co-located with scene)
+# entities/peg/peg.gd (co-located with scene)
 
 # Class names: PascalCase
-class_name RookieCharacter
+class_name Rookie
 extends CharacterBody2D
 
 class_name PlinkoBoard
 extends Node2D
 
-class_name WeaponPeg
+class_name Peg
 extends StaticBody2D
 ```
 
 **✅ DO:**
 - Use `snake_case` for file names
 - Use `PascalCase` for class names
-- Match file name to primary class (rookie_character.gd → RookieCharacter)
+- Match file name to primary class (rookie.gd → Rookie)
+- Co-locate scene and script in same directory (characters/rookie/rookie.tscn + rookie.gd)
 
 **❌ DON'T:**
 - Mix naming conventions (RookieCharacter.gd)
 - Use spaces in file names
 - Use generic names (manager.gd, controller.gd)
+- Separate scene and script into different directories (use co-location)
 
 ### Step 2: Variable Declaration with Type Hints
 
@@ -269,9 +271,9 @@ func get_health_component() -> HealthComponent:
 ### Step 8: Resource Management
 
 ```gdscript
-# Preload for compile-time loading
-const CHARACTER_SCENE: PackedScene = preload("res://scenes/characters/rookie.tscn")
-const SPRITE_TEXTURE: Texture2D = preload("res://assets/sprites/rookie.png")
+# Preload for compile-time loading (co-located structure)
+const CHARACTER_SCENE: PackedScene = preload("res://characters/rookie/rookie.tscn")
+const SPRITE_TEXTURE: Texture2D = preload("res://assets/sprites/characters/rookie.png")
 
 func spawn_character():
 	var character = CHARACTER_SCENE.instantiate()
@@ -279,7 +281,7 @@ func spawn_character():
 
 # Load for runtime/conditional loading
 func load_level(level_name: String):
-	var path = "res://scenes/levels/%s.tscn" % level_name
+	var path = "res://game/levels/%s/%s.tscn" % [level_name, level_name]
 	var level_scene = load(path) as PackedScene
 
 	if level_scene:

@@ -172,23 +172,45 @@ func _on_died() -> void:
 **Build complex scenes from simple scenes:**
 
 ```
-# Project structure:
-scenes/
-├── main.tscn                    # Entry point
-├── game/
-│   ├── plinko_board.tscn        # Composes pegs + drop zones
-│   └── combat_arena.tscn        # Composes battlefield + units
-├── characters/                  # Reusable character scenes
+# Project structure (co-located: scene + script + data together):
+main.tscn                        # Entry point (root level)
+
+game/                            # Game systems
+├── plinko_board/
+│   ├── plinko_board.tscn       # Scene
+│   ├── plinko_board.gd         # Script
+│   └── drop_zone.gd            # Related script
+└── combat_arena/
+    ├── combat_arena.tscn
+    └── combat_arena.gd
+
+characters/                      # Playable heroes (co-located)
+├── rookie/
 │   ├── rookie.tscn
+│   ├── rookie.gd
+│   └── rookie.tres             # Hero data
+├── bouncer/
 │   ├── bouncer.tscn
-│   └── lodestone.tscn
-├── pegs/                        # Reusable peg scenes
-│   ├── weapon_peg.tscn
-│   ├── armor_peg.tscn
-│   └── companion_peg.tscn
-└── ui/
-    ├── hud.tscn
-    └── menu.tscn
+│   ├── bouncer.gd
+│   └── bouncer.tres
+└── lodestone/
+    ├── lodestone.tscn
+    ├── lodestone.gd
+    └── lodestone.tres
+
+entities/                        # Game entities (co-located)
+└── peg/
+    ├── peg.tscn
+    ├── peg.gd
+    └── peg.tres (optional data)
+
+ui/                              # UI scenes (co-located when complex)
+├── hud/
+│   ├── hud.tscn
+│   └── hud.gd
+└── menu/
+    ├── menu.tscn
+    └── menu.gd
 ```
 
 **PlinkoBoard scene (composed):**
@@ -213,15 +235,16 @@ PlinkoBoard (Node2D)
 **Instancing in code:**
 
 ```gdscript
-# plinko_board.gd
+# game/plinko_board/plinko_board.gd
 extends Node2D
 
-const WEAPON_PEG: PackedScene = preload("res://scenes/pegs/weapon_peg.tscn")
-const CHARACTER: PackedScene = preload("res://scenes/characters/rookie.tscn")
+# Co-located structure paths
+const PEG_SCENE: PackedScene = preload("res://entities/peg/peg.tscn")
+const CHARACTER: PackedScene = preload("res://characters/rookie/rookie.tscn")
 
 func spawn_pegs() -> void:
 	for i in range(10):
-		var peg = WEAPON_PEG.instantiate()
+		var peg = PEG_SCENE.instantiate()
 		peg.position = Vector2(i * 50, 100)
 		$PegGrid.add_child(peg)
 
@@ -244,22 +267,28 @@ func spawn_character(pos: Vector2) -> void:
 **Use inheritance for variants:**
 
 ```
-# Base scene: character_base.tscn
-CharacterBase (RigidBody2D)
+# Base scene: characters/hero_base/hero_base.tscn (or just use composition)
+HeroBase (CharacterBody2D)
 ├── Sprite2D
 ├── CollisionShape2D
 └── Components (Node)
     └── HealthComponent
 
-# Inherited scene: rookie.tscn (inherits character_base.tscn)
-Rookie (extends character_base.tscn)
-└── [Sprite2D] # Overridden to use rookie sprite
-└── [Added] AbilityComponent # Added to inherited scene
+# Co-located variant: characters/rookie/rookie.tscn
+Rookie (CharacterBody2D) [can inherit hero_base or use composition]
+├── Sprite2D (rookie sprite)
+├── CollisionShape2D
+└── Components (Node)
+    ├── HealthComponent
+    └── AbilityComponent
 
-# Inherited scene: bouncer.tscn (inherits character_base.tscn)
-Bouncer (extends character_base.tscn)
-└── [Sprite2D] # Overridden to use bouncer sprite
-└── [Added] NudgeAbility # Different ability
+# Co-located variant: characters/bouncer/bouncer.tscn
+Bouncer (CharacterBody2D)
+├── Sprite2D (bouncer sprite)
+├── CollisionShape2D
+└── Components (Node)
+    ├── HealthComponent
+    └── NudgeAbility
 ```
 
 **When to use inheritance:**
@@ -274,63 +303,93 @@ Bouncer (extends character_base.tscn)
 
 ### Step 6: Project Organization
 
-**Recommended folder structure:**
+**Recommended folder structure (CO-LOCATED):**
 
 ```
 project_root/
-├── scenes/
-│   ├── main.tscn                 # Entry scene
-│   ├── game/                     # Core game scenes
+├── main.tscn                     # Entry point (root level)
+│
+├── game/                         # Game systems (co-located: scene + script)
+│   ├── plinko_board/
 │   │   ├── plinko_board.tscn
-│   │   └── combat_arena.tscn
-│   ├── characters/               # Character scenes
-│   │   ├── character_base.tscn   # Inherited base
-│   │   ├── rookie.tscn
+│   │   ├── plinko_board.gd
+│   │   └── drop_zone.gd         # Related scripts
+│   └── combat_arena/
+│       ├── combat_arena.tscn
+│       └── combat_arena.gd
+│
+├── characters/                   # Heroes (co-located: scene + script + data)
+│   ├── rookie/
+│   │   ├── rookie.tscn          # Scene
+│   │   ├── rookie.gd            # Script
+│   │   └── rookie.tres          # Hero data
+│   ├── bouncer/
 │   │   ├── bouncer.tscn
-│   │   └── lodestone.tscn
-│   ├── pegs/                     # Peg scenes
-│   │   ├── peg_base.tscn
-│   │   ├── weapon_peg.tscn
-│   │   └── ...
-│   ├── ui/                       # UI scenes
+│   │   ├── bouncer.gd
+│   │   └── bouncer.tres
+│   ├── lodestone/
+│   │   ├── lodestone.tscn
+│   │   ├── lodestone.gd
+│   │   └── lodestone.tres
+│   └── hero_base.gd             # Shared base class (if using inheritance)
+│
+├── entities/                     # Game entities (co-located: scene + script)
+│   ├── peg/
+│   │   ├── peg.tscn
+│   │   └── peg.gd
+│   ├── companion_unit.gd        # Combat companions
+│   └── enemy_unit.gd            # Combat enemies
+│
+├── ui/                           # UI scenes (co-located when complex)
+│   ├── hud/
 │   │   ├── hud.tscn
-│   │   └── menu.tscn
-│   └── vfx/                      # Visual effects
-│       ├── hit_effect.tscn
-│       └── explosion.tscn
+│   │   └── hud.gd
+│   └── menu/
+│       ├── menu.tscn
+│       └── menu.gd
 │
-├── scripts/
-│   ├── game/                     # Game logic
-│   │   └── plinko_board.gd
-│   ├── characters/               # Character scripts
-│   │   └── rookie.gd
-│   ├── pegs/                     # Peg scripts
-│   ├── components/               # Reusable components
-│   │   ├── health_component.gd
-│   │   ├── damage_component.gd
-│   │   └── ability_component.gd
-│   └── autoload/                 # Global singletons
-│       ├── game_manager.gd
-│       └── event_bus.gd
+├── components/                   # Shared reusable components
+│   ├── health_component.gd
+│   ├── movement_component.gd
+│   └── ability_component.gd
 │
-├── assets/
+├── autoload/                     # Global singletons
+│   ├── strings.gd               # String constants & paths
+│   ├── game_manager.gd          # Game state management
+│   ├── events.gd                # Event bus
+│   └── database.gd              # Resource caching
+│
+├── resources/                    # Shared Resource class definitions + data
+│   ├── hero.gd                  # Hero Resource class
+│   ├── card.gd                  # Card Resource class
+│   ├── companion.gd             # Companion Resource class
+│   └── configs/                 # Game configuration .tres files
+│       └── game_config.tres
+│
+├── assets/                       # Game assets
 │   ├── sprites/
 │   │   ├── characters/
-│   │   └── pegs/
+│   │   └── entities/
 │   ├── audio/
+│   │   ├── sfx/
+│   │   └── music/
 │   └── fonts/
 │
-└── resources/
-    └── configs/
-        ├── rookie_stats.tres
-        └── physics_config.tres
+└── test/                         # Test scenes and scripts
+    ├── test_plinko/
+    │   ├── test_plinko.tscn
+    │   └── test_plinko.gd
+    └── test_ball/
+        ├── test_ball.tscn
+        └── test_ball.gd
 ```
 
-**Organization Principles:**
-- ✅ Mirror structure: scenes/ and scripts/ should match
-- ✅ Group by feature/entity type
-- ✅ Separate scenes, scripts, assets, resources
-- ✅ Use autoload/ for global singletons
+**Organization Principles (CO-LOCATED ARCHITECTURE):**
+- ✅ Co-locate: Scene, script, and data for each entity live together
+- ✅ Shared code: Components and autoloads are separate (used by many entities)
+- ✅ Resource classes: Shared Resource class definitions in resources/ directory
+- ✅ Clear ownership: Easy to find all files related to a specific entity
+- ✅ Scales well: Structure grows cleanly as features are added
 
 ### Step 7: Autoload Singletons for Global Systems
 
@@ -341,7 +400,7 @@ project_root/
 - Save/load systems
 
 ```gdscript
-# scripts/autoload/game_manager.gd
+# autoload/game_manager.gd (co-located in autoload directory)
 extends Node
 
 signal score_changed(new_score: int)
@@ -436,12 +495,12 @@ extends Resource
 1. Right-click in FileSystem
 2. New Resource
 3. Select CharacterStats
-4. Save as `rookie_stats.tres`
+4. Save as `characters/rookie/rookie.tres` (co-located with scene and script)
 
 **Use in scene:**
 
 ```gdscript
-# rookie.gd
+# characters/rookie/rookie.gd
 extends CharacterBody2D
 
 @export var stats: CharacterStats
@@ -454,7 +513,7 @@ func _ready():
 
 **Assign in Inspector:**
 - Select Rookie scene
-- Drag `rookie_stats.tres` to "Stats" property
+- Drag `characters/rookie/rookie.tres` to "Stats" property (co-located)
 
 **Resource Benefits:**
 - ✅ Editable in Inspector without code changes
@@ -468,10 +527,10 @@ func _ready():
 
 ```gdscript
 # In any scene, add test code:
-# test_character.gd
+# test/test_character/test_character.gd
 extends Node2D
 
-const CHARACTER: PackedScene = preload("res://scenes/characters/rookie.tscn")
+const CHARACTER: PackedScene = preload("res://characters/rookie/rookie.tscn")
 
 func _ready():
 	# Spawn test instance
@@ -502,6 +561,10 @@ func _on_character_died():
 - ✅ Check collision shapes (Debug > Shapes)
 - ✅ Test with different configurations
 - ✅ Integrate into main game only after isolated testing
+
+**Note on Co-location:**
+- Test files can be co-located in `test/test_{feature}/` directories
+- Each test has its own folder with scene and script together
 
 ## Best Practices Summary
 
@@ -613,33 +676,41 @@ MainMenu (Control)
 
 ## Example: Complete Scene Architecture
 
-**Game flow:**
+**Game flow (CO-LOCATED STRUCTURE):**
 
 ```
-Main.tscn (Node)
+main.tscn (Node)
 └── [Loads] PlinkoBoard or CombatArena based on game state
 
-PlinkoBoard.tscn (Node2D)
-├── [Instances] Pegs (weapon_peg.tscn, armor_peg.tscn, etc.)
+game/plinko_board/plinko_board.tscn (Node2D)
+├── [Instances] Pegs (entities/peg/peg.tscn)
 ├── [Instances] DropZones
 └── [Instances] BottomZones
 
-Character scenes:
-├── character_base.tscn (RigidBody2D) [inherited by all]
-├── rookie.tscn (inherits character_base)
-├── bouncer.tscn (inherits character_base)
-└── lodestone.tscn (inherits character_base)
+characters/ (co-located: scene + script + data together)
+├── rookie/
+│   ├── rookie.tscn (CharacterBody2D)
+│   ├── rookie.gd
+│   └── rookie.tres
+├── bouncer/
+│   ├── bouncer.tscn
+│   ├── bouncer.gd
+│   └── bouncer.tres
+└── lodestone/
+    ├── lodestone.tscn
+    ├── lodestone.gd
+    └── lodestone.tres
 
-Components (reusable):
-├── HealthComponent.gd
-├── DamageComponent.gd
-├── AbilityComponent.gd
-└── NavigationComponent.gd
+components/ (shared reusable code)
+├── health_component.gd
+├── movement_component.gd
+├── ability_component.gd
+└── navigation_component.gd
 
-Autoloads (global):
-├── GameManager (score, level, state)
-├── EventBus (global events)
-└── AudioManager (music, SFX)
+autoload/ (global singletons)
+├── game_manager.gd (score, level, state)
+├── events.gd (event bus)
+└── database.gd (resource caching)
 ```
 
 ## Summary

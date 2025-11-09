@@ -19,6 +19,7 @@ Claude Skills are structured markdown documents that guide Claude through comple
 claude-skills-library/
 ├── generic/          # Works with any programming language/framework
 ├── flutter/          # Flutter/Dart-specific workflows
+├── hooks/            # Claude Code hooks for automatic quality checks
 ├── commands/         # Reusable documentation workflow commands
 ├── templates/        # Adaptable templates for common patterns
 ├── speckit/          # GitHub Spec-Kit commands (feature development)
@@ -109,6 +110,27 @@ These are pattern templates that need customization for your specific project.
 | **[project-documentation-structure-template](templates/project-documentation-structure-template.md)** | Complete documentation system (CLAUDE.md, specs/, .claude/ structure) | Any |
 | **[activity-logging-template](templates/activity-logging-template.md)** | Add audit trail/activity logging to operations | Any |
 | **[localization-workflow-template](templates/localization-workflow-template.md)** | Internationalization (i18n) best practices | React, Vue, Angular, Flutter, etc. |
+
+### 🎣 Claude Code Hooks
+
+Automated quality checks that run at key moments during development. **These implement "automation over reminders" by proactively enforcing best practices.**
+
+| Hook | Triggers | Purpose |
+|------|----------|---------|
+| **[user-prompt-submit](hooks/user-prompt-submit.md)** | Before Claude sees your message | Auto-injects relevant context based on request keywords (mobile-first, localization, testing, etc.) |
+| **[stop-event](hooks/stop-event.md)** | After Claude finishes responding | Quality checks and pattern compliance verification (build errors, formatting, pattern adherence) |
+| **[pre-commit](hooks/pre-commit.md)** | Before creating git commits | Final quality gate (analyze, format, tests, pattern warnings, documentation reminders) |
+
+**Setup**: Symlink to your project:
+```bash
+ln -s ../claude-skills-library/hooks/user-prompt-submit.md .claude/hooks/user-prompt-submit.md
+ln -s ../claude-skills-library/hooks/stop-event.md .claude/hooks/stop-event.md
+ln -s ../claude-skills-library/hooks/pre-commit.md .claude/hooks/pre-commit.md
+```
+
+**For detailed information**: See [hooks/README.md](hooks/README.md) and [hooks/USAGE_GUIDE.md](hooks/USAGE_GUIDE.md)
+
+**Why hooks matter**: Without hooks, skills sit unused, errors slip through, code is inconsistently formatted, and there are no automatic quality checks. Hooks tie everything together by making Claude autonomous in maintaining code quality.
 
 ## 🚀 Quick Start
 
@@ -437,9 +459,10 @@ Claude: Testing on 375x667px viewport...
 
 - **Total Skills**: 10 (5 generic, 2 Flutter, 3 templates)
 - **Total Commands**: 8 (documentation workflow)
+- **Total Hooks**: 3 (quality automation)
 - **Lines of Documentation**: ~10,000+
 - **Code Examples**: 100+
-- **Workflows Covered**: Development, Testing, Design, Git, i18n, Auditing, Documentation Systems, Code Understanding
+- **Workflows Covered**: Development, Testing, Design, Git, i18n, Auditing, Documentation Systems, Code Understanding, Quality Automation
 
 ## 🔮 Future Skills (Roadmap)
 

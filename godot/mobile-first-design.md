@@ -33,11 +33,11 @@ Before implementing any feature, ensure project settings are mobile-optimized:
 # Verify in Project > Project Settings:
 
 # Display > Window
-Width: 375          # iPhone SE width
-Height: 667         # iPhone SE height
+Width: 750          # iPhone SE width @ 2x scale
+Height: 1334        # iPhone SE height @ 2x scale
 Orientation: Portrait
-Stretch Mode: canvas_items
-Stretch Aspect: keep
+Stretch Mode: viewport
+Stretch Aspect: expand
 
 # Rendering > Renderer
 Renderer: Mobile    # CRITICAL: Use Mobile renderer, not Forward+
@@ -95,8 +95,8 @@ func _on_button_pressed():
 ```
 
 **UI Checklist:**
-- ✅ All interactive elements ≥ 44x44pt
-- ✅ Text readable at 375px width (min 14pt font)
+- ✅ All interactive elements ≥ 88x88px (44pt @ 2x scale)
+- ✅ Text readable at 750px width (min 28px font / 14pt @ 2x)
 - ✅ Single-hand reachable controls (bottom 2/3 of screen)
 - ✅ Portrait orientation by default
 - ✅ No hover-dependent interactions (touch has no hover state)
@@ -244,7 +244,7 @@ High Quality: Disabled
 
 **Asset Checklist:**
 - ✅ VRAM compression for all textures (75% memory reduction)
-- ✅ Appropriate resolutions for target screen (375x667)
+- ✅ Appropriate resolutions for target screen (750x1334 @ 2x scale)
 - ✅ Ogg Vorbis for music, WAV for SFX
 - ✅ MSDF fonts for scalable text
 
@@ -307,10 +307,10 @@ Architecture > Architectures: armeabi-v7a, arm64-v8a
 ## Best Practices
 
 **✅ DO:**
-- Design for 375x667px (iPhone SE) viewport first
+- Design for 750x1334px (iPhone SE @ 2x scale) viewport first
 - Use Mobile renderer in Project Settings
 - Support touch input (InputEventScreenTouch)
-- Ensure 44x44pt minimum touch targets
+- Ensure 88x88px minimum touch targets (44pt @ 2x)
 - Profile early and often with Godot Profiler
 - Test on actual devices, not emulators
 - Use texture atlases for sprite batching
@@ -459,8 +459,8 @@ func _process(delta: float) -> void:
 
 Mobile-first Godot development requires:
 1. **Configure project for Mobile renderer** (not Forward+)
-2. **Design for 375x667px** with portrait orientation
-3. **Support touch input** with 44pt minimum targets
+2. **Design for 750x1334px (2x scale)** with portrait orientation, viewport + expand mode
+3. **Support touch input** with 88px minimum targets (44pt @ 2x)
 4. **Optimize rendering** with texture atlases (< 50 draw calls)
 5. **Optimize physics** with collision layers (< 100 bodies)
 6. **Avoid allocations** in update loops (prevent GC spikes)

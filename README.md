@@ -70,11 +70,13 @@ Workflow enhancement commands to improve development efficiency.
 
 | Command | Description | Use When |
 |---------|-------------|----------|
+| **[/implement-with-speckit](commands/implement-with-speckit.md)** | Run complete SpecKit workflow with mandatory quality gates | Starting full feature implementation from scratch |
 | **[/suggest-skills](commands/suggest-skills.md)** | Analyze current work and suggest relevant skills | Need guidance on which skills to use |
 
 **Setup**: Symlink to your project:
 ```bash
 ln -s ../claude-skills-library/commands/docs.create.md .claude/commands/docs.create.md
+ln -s ../claude-skills-library/commands/implement-with-speckit.md .claude/commands/implement-with-speckit.md
 ln -s ../claude-skills-library/commands/suggest-skills.md .claude/commands/suggest-skills.md
 # ... (repeat for other commands)
 ```
